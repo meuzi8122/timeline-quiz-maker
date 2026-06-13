@@ -1,6 +1,7 @@
 import { shuffle } from "es-toolkit";
 
 export interface OccurrencePair {
+	id: string;
 	/**
 	 * yyyy/mm/ddの文字列
 	 */

@@ -4,14 +4,16 @@
 		shuffleOccurrences,
 		type OccurrencePair
 	} from "$lib/domains/entitite/occurrence-pair";
+	import type { Question } from "$lib/domains/entitite/question";
 	import type { OccurenceType } from "./occurence-type";
 	import OccurrenceList from "./occurrence-list.svelte";
 
 	interface Props {
+		question: Question;
 		occurencesPairs: OccurrencePair[];
 	}
 
-	let { occurencesPairs }: Props = $props();
+	let { question, occurencesPairs }: Props = $props();
 
 	let dragIndex = $state<number | null>(null);
 	let dragOccurenceType = $state<OccurenceType | null>(null);
@@ -41,9 +43,9 @@
 			return updatedOccurrences;
 		};
 
-		if (dragOccurenceType === "left") {
+		if (dragOccurenceType === "theme1") {
 			occurrences1 = swapOccurrences(occurrences1, dragIndex, index);
-		} else if (dragOccurenceType === "right") {
+		} else if (dragOccurenceType === "theme2") {
 			occurrences2 = swapOccurrences(occurrences2, dragIndex, index);
 		}
 
@@ -85,18 +87,21 @@
 	}
 </script>
 
-<div>
+<div class="flex flex-col items-center">
+	<h1 class="text-2xl font-bold mb-4 text-center">{question.title}</h1>
 	<div class="flex gap-2">
 		<OccurrenceList
+			theme={question.theme1}
 			occurences={occurrences1}
-			occurenceType="left"
+			occurenceType="theme1"
 			{handleDragOver}
 			{handleDragStart}
 			{handleDragEnd}
 		/>
 		<OccurrenceList
+			theme={question.theme2}
 			occurences={occurrences2}
-			occurenceType="right"
+			occurenceType="theme2"
 			{handleDragOver}
 			{handleDragStart}
 			{handleDragEnd}
@@ -106,7 +111,9 @@
 	<p class="mt-2">{message}</p>
 
 	<div class="flex gap-2 mt-4">
-		<button onclick={handleAnswerButtonClick} disabled={!answerable}>回答する</button>
-		<button onclick={handleShowAnswerButtonClick}>回答を見る</button>
+		<button class="btn btn-primary" onclick={handleAnswerButtonClick} disabled={!answerable}
+			>回答する</button
+		>
+		<button class="btn btn-warning" onclick={handleShowAnswerButtonClick}>正解を見る</button>
 	</div>
 </div>

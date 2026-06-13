@@ -1,1 +1,1 @@
-export type OccurenceType = "left" | "right";
+export type OccurenceType = "theme1" | "theme2";
