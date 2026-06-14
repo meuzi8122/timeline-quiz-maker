@@ -1,5 +1,6 @@
 <script lang="ts">
 	import OccurrenceListItem, { type OccurrenceType } from "./occurrence-list-item.svelte";
+	import { fly } from "svelte/transition";
 
 	type Props = {
 		index: number;
@@ -28,8 +29,13 @@
 	}: Props = $props();
 </script>
 
+<!-- アニメーションを有効にするため、三項演算子ではなくif-elseブロックで条件分岐 -->
 <div class="grid grid-cols-[4rem_1fr_1fr] gap-2 items-center mb-2">
-	<div>{correctPositionPairIndexes.has(index) || !answerable ? occurredAt : "????/??"}</div>
+	{#if correctPositionPairIndexes.has(index) || !answerable}
+		<div transition:fly={{ y: 20, duration: 700 }}>{occurredAt}</div>
+	{:else}
+		<div>????/??</div>
+	{/if}
 	<OccurrenceListItem
 		occurrence={occurrence1}
 		{index}
