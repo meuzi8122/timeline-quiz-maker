@@ -11,6 +11,7 @@
 		handleDragEnd: () => void;
 		handleDrop(event: DragEvent, index: number, occurrenceType: OccurrenceType): void;
 		answerable: boolean;
+		correctPositionPairIndexes: Set<number>;
 	};
 
 	let {
@@ -22,12 +23,13 @@
 		handleDragOver,
 		handleDragEnd,
 		handleDrop,
-		answerable
+		answerable,
+		correctPositionPairIndexes
 	}: Props = $props();
 </script>
 
 <div class="grid grid-cols-[4rem_1fr_1fr] gap-2 items-center mb-2">
-	<div>{answerable ? "????/??" : occurredAt}</div>
+	<div>{correctPositionPairIndexes.has(index) || !answerable ? occurredAt : "????/??"}</div>
 	<OccurrenceListItem
 		occurrence={occurrence1}
 		{index}

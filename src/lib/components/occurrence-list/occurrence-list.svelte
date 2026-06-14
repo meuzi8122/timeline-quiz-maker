@@ -64,7 +64,7 @@
 
 	let answerable = $state(true);
 
-	let correctPositionPairCount = $state(0);
+	let correctPositionPairIndexes = $state(new Set<number>());
 	let correctPairCount = $state(0);
 
 	let message = $derived(
@@ -75,12 +75,12 @@
 	);
 
 	function handleAnswerButtonClick() {
-		({ correctPositionPairCount, correctPairCount } = checkAnswers(
+		({ correctPositionPairIndexes, correctPairCount } = checkAnswers(
 			occurencesPairs,
 			occurrences1,
 			occurrences2
 		));
-		if (correctPositionPairCount === occurencesPairs.length) {
+		if (correctPositionPairIndexes.size === occurencesPairs.length) {
 			alert("正解です");
 			answerable = false;
 		}
@@ -107,6 +107,7 @@
 				{handleDragEnd}
 				{handleDrop}
 				{answerable}
+				{correctPositionPairIndexes}
 			/>
 		{/each}
 	</div>

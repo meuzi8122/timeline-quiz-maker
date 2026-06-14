@@ -3,9 +3,9 @@ import { shuffle } from "es-toolkit";
 export interface OccurrencePair {
 	id: string;
 	/**
-	 * yyyy/mm/ddの文字列
+	 * yyyy/mm/の文字列
 	 */
-	date: string;
+	occurredAt: string;
 	/**
 	 * タイムライン1で発生した出来事
 	 */
@@ -36,11 +36,12 @@ export function checkAnswers(
 	occurrences1: string[],
 	occurrences2: string[]
 ): {
-	correctPositionPairCount: number;
 	correctPairCount: number;
+	correctPositionPairIndexes: Set<number>;
 } {
 	let correctPositionPairCount = 0;
 	let correctPairCount = 0;
+	let correctPositionPairIndexes = new Set<number>();
 
 	for (const [correctIndex, pair] of occurencesPairs.entries()) {
 		const answerIndex1 = occurrences1.indexOf(pair.occurrence1);
@@ -50,10 +51,10 @@ export function checkAnswers(
 			correctPairCount++;
 			// 実際の年代とも一致している
 			if (answerIndex1 === correctIndex) {
-				correctPositionPairCount++;
+				correctPositionPairIndexes.add(correctIndex);
 			}
 		}
 	}
 
-	return { correctPositionPairCount, correctPairCount };
+	return { correctPairCount, correctPositionPairIndexes };
 }
