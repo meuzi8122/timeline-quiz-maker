@@ -4,7 +4,7 @@
 		shuffleOccurrences,
 		type OccurrencePair
 	} from "$lib/domains/entitite/occurrence-pair";
-	import type { Question } from "$lib/domains/entitite/question";
+	import { createTitle, type Question } from "$lib/domains/entitite/question";
 	import type { OccurrenceType } from "./occurrence-list-item.svelte";
 	import OccurrenceListRow from "./occurrence-list-row.svelte";
 
@@ -93,8 +93,10 @@
 	}
 </script>
 
-<div class="flex flex-col items-center">
-	<h1 class="text-2xl font-bold mb-4 text-center">{question.title}</h1>
+<div class="flex flex-col items-center mt-6">
+	<h1 class="text-xl font-bold mb-4 text-center">
+		{createTitle(question)}
+	</h1>
 	<div class="flex flex-col">
 		{#each occurrences1 as occurrence1, index}
 			<OccurrenceListRow

@@ -3,20 +3,20 @@
 	import type { OccurrencePair } from "$lib/domains/entitite/occurrence-pair";
 	import { newQuestionSchema } from "./schema";
 
-	let title = $state("");
 	let theme1 = $state("");
 	let theme2 = $state("");
+	let description = $state("");
 	let occurencesPairs = $state<Omit<OccurrencePair, "id">[]>([]);
 
 	let errors = $state<Record<string, string[] | undefined>>({
-		title: [],
 		theme1: [],
 		theme2: [],
+		description: [],
 		occurrencePairs: []
 	});
 
 	function handleAddButtonClick() {
-		occurencesPairs = [...occurencesPairs, { date: "", occurrence1: "", occurrence2: "" }];
+		occurencesPairs = [...occurencesPairs, { occurredAt: "", occurrence1: "", occurrence2: "" }];
 	}
 
 	function handleDeleteButtonClick(index: number) {
@@ -26,9 +26,9 @@
 	async function handleSubmitButtonClick() {
 		const formData = new FormData();
 
-		formData.append("title", title);
 		formData.append("theme1", theme1);
 		formData.append("theme2", theme2);
+		formData.append("description", description);
 		formData.append("occurrencePairs", JSON.stringify(occurencesPairs));
 
 		const submission = newQuestionSchema.safeParse(Object.fromEntries(formData.entries()));
@@ -51,13 +51,8 @@
 	}
 </script>
 
-<div class="container mx-auto flex flex-col gap-2 mt-4">
-	<h1 class="text-xl font-bold">クイズを投稿</h1>
-	<fieldset class="fieldset">
-		<legend class="fieldset-legend">クイズタイトル</legend>
-		<input type="text" class="input w-full" placeholder="オモコロ" bind:value={title} />
-		{#if errors.title}<p class="label text-red-500">{errors.title[0]}</p>{/if}
-	</fieldset>
+<div class="container mx-auto flex flex-col gap-3 mt-6">
+	<h1 class="text-xl font-bold text-center">クイズを投稿</h1>
 	<div class="flex gap-2">
 		<fieldset class="fieldset w-full">
 			<legend class="fieldset-legend">お題1</legend>
@@ -70,12 +65,21 @@
 			{#if errors.theme2}<p class="label text-red-500">{errors.theme2[0]}</p>{/if}
 		</fieldset>
 	</div>
+	<fieldset class="fieldset w-full">
+		<legend class="fieldset-legend">クイズについての説明（任意）</legend>
+		<textarea
+			class="textarea h-24 w-full"
+			placeholder="同時期に起こったオモコロと漫画の出来事を当てるクイズです。"
+			bind:value={description}
+		></textarea>
+		{#if errors.description}<p class="label text-red-500">{errors.description[0]}</p>{/if}
+	</fieldset>
 	<div class="flex flex-col gap-2">
 		<span class="text-[12px] font-semibold block leading-normal">出来事</span>
 		<div class="flex flex-col gap-2">
 			{#each occurencesPairs as pair, index}
 				<div class="flex gap-2">
-					<input type="text" class="input" placeholder="2026/1" bind:value={pair.date} />
+					<input type="text" class="input" placeholder="2026/1" bind:value={pair.occurredAt} />
 					<input
 						type="text"
 						class="input flex-1"

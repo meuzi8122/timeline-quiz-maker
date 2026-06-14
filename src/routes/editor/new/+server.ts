@@ -9,10 +9,12 @@ export const POST: RequestHandler = async ({ request }) => {
 
 	if (!submission.success) {
 		console.error("Validation failed:", submission.error.flatten().fieldErrors);
-		return json({
-			errors: submission.error.flatten().fieldErrors,
-			status: 400
-		});
+		return json(
+			{
+				errors: submission.error.flatten().fieldErrors
+			},
+			{ status: 400 }
+		);
 	}
 
 	try {
@@ -22,17 +24,17 @@ export const POST: RequestHandler = async ({ request }) => {
 			},
 			{
 				question: {
-					title: submission.data.title,
 					theme1: submission.data.theme1,
-					theme2: submission.data.theme2
+					theme2: submission.data.theme2,
+					description: submission.data.description
 				},
 				occurrencePairs: submission.data.occurrencePairs
 			}
 		);
 	} catch (error) {
 		console.error("Failed to create question:", error);
-		return json({ status: 500 });
+		return json(null, { status: 500 });
 	}
 
-	return json({ status: 200 });
+	return json(null, { status: 200 });
 };

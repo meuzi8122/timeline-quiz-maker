@@ -1,6 +1,6 @@
-<div class="navbar">
+<div class="navbar bg-base-300">
 	<div class="flex-1">
-		<a class="btn btn-ghost text-xl" href="/">一方その頃クイズ</a>
+		<a class="btn btn-ghost text-xl" href="/">一方その頃</a>
 	</div>
 	<div class="flex-none">
 		<div class="dropdown dropdown-left">
@@ -24,8 +24,9 @@
 				tabindex="-1"
 				class="menu dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
 			>
+				<li><a href="/">クイズを探す</a></li>
 				<li><a href="/editor/new">クイズを投稿</a></li>
-				<li><a href="/about">このサイトについて</a></li>
+				<li><a href="/about">クイズの遊び方</a></li>
 			</ul>
 		</div>
 	</div>

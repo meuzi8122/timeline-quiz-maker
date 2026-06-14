@@ -24,7 +24,7 @@
 </script>
 
 <div
-	class={`w-full block p-4 border border-gray-200 rounded text-center cursor-pointer ${occurrenceType === "theme2" ? "bg-blue-100" : "bg-red-100"}`}
+	class={`w-full block p-4 border border-gray-500 rounded text-center cursor-pointer ${occurrenceType === "theme2" ? "bg-blue-500" : "bg-red-600"}`}
 	draggable="true"
 	role="listitem"
 	ondragstart={(e) => handleDragStart(e, index, occurrenceType)}

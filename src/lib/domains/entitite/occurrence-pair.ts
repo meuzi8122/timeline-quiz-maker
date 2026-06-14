@@ -39,7 +39,6 @@ export function checkAnswers(
 	correctPairCount: number;
 	correctPositionPairIndexes: Set<number>;
 } {
-	let correctPositionPairCount = 0;
 	let correctPairCount = 0;
 	let correctPositionPairIndexes = new Set<number>();
 
