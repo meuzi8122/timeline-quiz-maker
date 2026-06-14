@@ -4,6 +4,6 @@
 	let { data } = $props();
 </script>
 
-<div class="container mx-auto mt-4">
+<div class="container mx-auto px-4 max-w-6xl">
 	<OccurrenceList question={data.question} occurencesPairs={data.question.occurrencePairs} />
 </div>

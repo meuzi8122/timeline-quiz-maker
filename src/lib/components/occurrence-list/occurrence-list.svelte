@@ -114,7 +114,7 @@
 		{/each}
 	</div>
 
-	<p class="mt-2">{message}</p>
+	{#if message}<p class="mt-5">{message}</p>{/if}
 
 	<div class="flex gap-2 mt-4">
 		<button class="btn btn-primary" onclick={handleAnswerButtonClick} disabled={!answerable}

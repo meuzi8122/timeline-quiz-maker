@@ -6,5 +6,5 @@ export type Question = {
 };
 
 export function createTitle(question: Question): string {
-	return `「${question.theme1}」と「${question.theme2}」の出来事`;
+	return `「${question.theme1}」と「${question.theme2}」`;
 }

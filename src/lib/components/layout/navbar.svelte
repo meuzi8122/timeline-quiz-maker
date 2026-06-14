@@ -26,7 +26,7 @@
 			>
 				<li><a href="/">クイズを探す</a></li>
 				<li><a href="/editor/new">クイズを投稿</a></li>
-				<li><a href="/about">クイズの遊び方</a></li>
+				<li><a href="/how-to-play">クイズの遊び方</a></li>
 			</ul>
 		</div>
 	</div>
