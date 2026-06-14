@@ -5,8 +5,8 @@
 		type OccurrencePair
 	} from "$lib/domains/entitite/occurrence-pair";
 	import type { Question } from "$lib/domains/entitite/question";
-	import type { OccurenceType } from "./occurence-type";
-	import OccurrenceList from "./occurrence-list.svelte";
+	import type { OccurrenceType } from "./occurrence-list-item.svelte";
+	import OccurrenceListRow from "./occurrence-list-row.svelte";
 
 	interface Props {
 		question: Question;
@@ -16,7 +16,7 @@
 	let { question, occurencesPairs }: Props = $props();
 
 	let dragIndex = $state<number | null>(null);
-	let dragOccurenceType = $state<OccurenceType | null>(null);
+	let dragOccurrenceType = $state<OccurrenceType | null>(null);
 
 	// svelte-ignore state_referenced_locally
 	const shuffledOccurrences = shuffleOccurrences(occurencesPairs);
@@ -24,17 +24,24 @@
 	let occurrences1 = $state<string[]>(shuffledOccurrences.occurrences1);
 	let occurrences2 = $state<string[]>(shuffledOccurrences.occurrences2);
 
-	function handleDragStart(event: DragEvent, index: number, occurenceType: OccurenceType) {
+	function handleDragStart(event: DragEvent, index: number, occurrenceType: OccurrenceType) {
 		dragIndex = index;
-		dragOccurenceType = occurenceType;
+		dragOccurrenceType = occurrenceType;
 		if (event.dataTransfer) event.dataTransfer.effectAllowed = "move";
 	}
 
-	function handleDragOver(event: DragEvent, index: number, occurenceType: OccurenceType) {
+	function handleDragOver(event: DragEvent, occurrenceType: OccurrenceType) {
+		event.preventDefault();
+		if (dragOccurrenceType && dragOccurrenceType === occurrenceType) {
+			if (event.dataTransfer) event.dataTransfer.dropEffect = "move";
+		}
+	}
+
+	function handleDrop(event: DragEvent, index: number, occurrenceType: OccurrenceType) {
 		event.preventDefault();
 
-		if (!occurenceType || dragOccurenceType !== occurenceType) return;
-		if (!dragIndex || dragIndex === index) return;
+		if (!occurrenceType || dragOccurrenceType !== occurrenceType) return;
+		if (dragIndex === null || dragIndex === index) return;
 
 		const swapOccurrences = (occurrences: string[], dragIndex: number, index: number) => {
 			const updatedOccurrences = [...occurrences];
@@ -43,18 +50,16 @@
 			return updatedOccurrences;
 		};
 
-		if (dragOccurenceType === "theme1") {
+		if (dragOccurrenceType === "theme1") {
 			occurrences1 = swapOccurrences(occurrences1, dragIndex, index);
-		} else if (dragOccurenceType === "theme2") {
+		} else if (dragOccurrenceType === "theme2") {
 			occurrences2 = swapOccurrences(occurrences2, dragIndex, index);
 		}
-
-		dragIndex = index;
 	}
 
 	function handleDragEnd() {
 		dragIndex = null;
-		dragOccurenceType = null;
+		dragOccurrenceType = null;
 	}
 
 	let answerable = $state(true);
@@ -77,6 +82,7 @@
 		));
 		if (correctPositionPairCount === occurencesPairs.length) {
 			alert("正解です");
+			answerable = false;
 		}
 	}
 
@@ -89,23 +95,20 @@
 
 <div class="flex flex-col items-center">
 	<h1 class="text-2xl font-bold mb-4 text-center">{question.title}</h1>
-	<div class="flex gap-2">
-		<OccurrenceList
-			theme={question.theme1}
-			occurences={occurrences1}
-			occurenceType="theme1"
-			{handleDragOver}
-			{handleDragStart}
-			{handleDragEnd}
-		/>
-		<OccurrenceList
-			theme={question.theme2}
-			occurences={occurrences2}
-			occurenceType="theme2"
-			{handleDragOver}
-			{handleDragStart}
-			{handleDragEnd}
-		/>
+	<div class="flex flex-col">
+		{#each occurrences1 as occurrence1, index}
+			<OccurrenceListRow
+				{index}
+				occurredAt={occurencesPairs[index].occurredAt}
+				{occurrence1}
+				occurrence2={occurrences2[index]}
+				{handleDragOver}
+				{handleDragStart}
+				{handleDragEnd}
+				{handleDrop}
+				{answerable}
+			/>
+		{/each}
 	</div>
 
 	<p class="mt-2">{message}</p>

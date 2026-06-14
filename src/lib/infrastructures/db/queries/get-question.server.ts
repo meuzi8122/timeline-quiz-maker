@@ -17,6 +17,7 @@ export async function getQuestion(params: { id: string }): Promise<GetQuestionRe
 		query: `SELECT * FROM occurrence_pair WHERE question_id = ?`,
 		values: [params.id]
 	});
+	console.log("occurrencePairsRows", questionRows);
 
 	return {
 		id: questionRows[0].id?.toString() ?? "",
@@ -25,7 +26,7 @@ export async function getQuestion(params: { id: string }): Promise<GetQuestionRe
 		theme2: questionRows[0].theme2?.toString() ?? "",
 		occurrencePairs: occurrencePairsRows.map((row) => ({
 			id: row.id?.toString() ?? "",
-			date: row.date?.toString() ?? "",
+			occurredAt: row.occurred_at?.toString() ?? "",
 			occurrence1: row.occurrence1?.toString() ?? "",
 			occurrence2: row.occurrence2?.toString() ?? ""
 		}))
