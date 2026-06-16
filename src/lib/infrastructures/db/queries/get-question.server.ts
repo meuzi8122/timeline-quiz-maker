@@ -17,10 +17,10 @@ export async function getQuestion(params: { id: string }): Promise<GetQuestionRe
 		query: `SELECT * FROM occurrence_pair WHERE question_id = ?`,
 		values: [params.id]
 	});
-	console.log("occurrencePairsRows", questionRows);
 
 	return {
 		id: questionRows[0].id?.toString() ?? "",
+		ownerId: questionRows[0].owner_id?.toString() ?? "",
 		theme1: questionRows[0].theme1?.toString() ?? "",
 		theme2: questionRows[0].theme2?.toString() ?? "",
 		description: questionRows[0].description?.toString() ?? "",

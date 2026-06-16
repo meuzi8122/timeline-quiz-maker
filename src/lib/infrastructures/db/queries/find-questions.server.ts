@@ -7,6 +7,7 @@ export async function findQuestions(): Promise<Question[]> {
 	});
 	return rows.map((row) => ({
 		id: row.id?.toString() ?? "",
+		ownerId: row.owner_id?.toString() ?? "",
 		theme1: row.theme1?.toString() ?? "",
 		theme2: row.theme2?.toString() ?? "",
 		description: row.description?.toString() ?? ""

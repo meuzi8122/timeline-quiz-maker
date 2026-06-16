@@ -3,6 +3,7 @@ export type Question = {
 	theme1: string;
 	theme2: string;
 	description: string;
+	ownerId: string;
 };
 
 export function createTitle(question: Question): string {
