@@ -14,6 +14,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 	event.locals.session = session?.session ?? null;
 	event.locals.user = session?.user ?? null;
 
+	if (event.url.pathname === "/login" && event.locals.session && event.locals.user) {
+		return redirect(302, "/");
+	}
+
 	if (["/editor"].some((path) => event.url.pathname.startsWith(path))) {
 		if (!event.locals.session || !event.locals.user) {
 			return redirect(302, "/login");

@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
-	import { authClient } from "$lib/infrastructures/auth/auth-client";
+	import { authClient, signOut } from "$lib/infrastructures/auth/auth-client";
 
-	const { get: getSession } = authClient.useSession();
-	const data = getSession().data;
+	const session = authClient.useSession();
+	const data = $derived($session.data);
 
 	async function handleCreateButtonClick() {
 		if (!data) {
@@ -52,6 +52,11 @@
 				<li><a href="/">クイズを探す</a></li>
 				<li><button onclick={handleCreateButtonClick}>クイズを投稿</button></li>
 				<li><a href="/about">クイズの遊び方</a></li>
+				{#if data}
+					<li><button onclick={signOut}>ログアウト</button></li>
+				{:else}
+					<li><a href="/login">ログイン</a></li>
+				{/if}
 			</ul>
 		</div>
 	</div>
