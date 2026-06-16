@@ -36,6 +36,7 @@
 	},
 	"dependencies": {
 		"@libsql/client": "^0.17.3",
+		"better-auth": "^1.6.19",
 		"daisyui": "^5.5.23",
 		"es-toolkit": "^1.47.0",
 		"zod": "^4.4.3"
