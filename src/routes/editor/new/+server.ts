@@ -1,21 +1,10 @@
-import { questionRepository } from "$lib/infrastructures/db/repositories/question.server";
-import { createQuestionUsecase } from "$lib/usecases/question/create-question";
-import { newQuestionSchema } from "./schema";
+import { questionRepository } from "$lib/infrastructures/db/repositories/question.server.js";
+import { createQuestionUsecase } from "$lib/usecases/question/create-question.js";
 import { json, type RequestHandler } from "@sveltejs/kit";
+import { randomUUID } from "node:crypto";
 
 export const POST: RequestHandler = async ({ request }) => {
-	const formData = await request.formData();
-	const submission = newQuestionSchema.safeParse(Object.fromEntries(formData.entries()));
-
-	if (!submission.success) {
-		console.error("Validation failed:", submission.error.flatten().fieldErrors);
-		return json(
-			{
-				errors: submission.error.flatten().fieldErrors
-			},
-			{ status: 400 }
-		);
-	}
+	const id = randomUUID();
 
 	try {
 		await createQuestionUsecase(
@@ -23,12 +12,8 @@ export const POST: RequestHandler = async ({ request }) => {
 				questionRepository
 			},
 			{
-				question: {
-					theme1: submission.data.theme1,
-					theme2: submission.data.theme2,
-					description: submission.data.description
-				},
-				occurrencePairs: submission.data.occurrencePairs
+				id,
+				ownerId: ""
 			}
 		);
 	} catch (error) {
@@ -36,5 +21,5 @@ export const POST: RequestHandler = async ({ request }) => {
 		return json(null, { status: 500 });
 	}
 
-	return json(null, { status: 200 });
+	return json({ id }, { status: 201 });
 };

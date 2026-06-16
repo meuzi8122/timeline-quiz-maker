@@ -1,9 +1,9 @@
 import z from "zod";
 
-export const newQuestionSchema = z.object({
+export const updateQuestionSchema = z.object({
 	theme1: z.string().min(1, "お題1は必須です"),
 	theme2: z.string().min(1, "お題2は必須です"),
-	description: z.string().length(0), // 空文字ok
+	description: z.string(),
 	occurrencePairs: z
 		.string()
 		.transform((text) => JSON.parse(text))

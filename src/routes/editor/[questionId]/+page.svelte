@@ -1,12 +1,17 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
 	import type { OccurrencePair } from "$lib/domains/entitite/occurrence-pair";
-	import { newQuestionSchema } from "./schema";
+	import { updateQuestionSchema } from "./schema";
+	import { untrack } from "svelte";
 
-	let theme1 = $state("");
-	let theme2 = $state("");
-	let description = $state("");
-	let occurencesPairs = $state<Omit<OccurrencePair, "id">[]>([]);
+	let { data } = $props();
+
+	let theme1 = $state($state.snapshot(untrack(() => data.question.theme1)));
+	let theme2 = $state($state.snapshot(untrack(() => data.question.theme2)));
+	let description = $state($state.snapshot(untrack(() => data.question.description)));
+	let occurencesPairs = $state<Omit<OccurrencePair, "id">[]>(
+		untrack(() => data.question.occurrencePairs)
+	);
 
 	let errors = $state<Record<string, string[] | undefined>>({
 		theme1: [],
@@ -31,22 +36,22 @@
 		formData.append("description", description);
 		formData.append("occurrencePairs", JSON.stringify(occurencesPairs));
 
-		const submission = newQuestionSchema.safeParse(Object.fromEntries(formData.entries()));
+		const submission = updateQuestionSchema.safeParse(Object.fromEntries(formData.entries()));
 		if (!submission.success) {
 			errors = submission.error.flatten().fieldErrors;
 			return;
 		}
 
 		try {
-			await fetch("/editor/new", {
+			await fetch(`/editor/${data.question.id}`, {
 				method: "POST",
 				body: formData
 			});
 		} catch (error) {
-			alert("クイズの投稿に失敗しました。時間を置いて再度お試しください。");
+			alert("クイズの更新に失敗しました。時間を置いて再度お試しください。");
 		}
 
-		alert("クイズを投稿しました！");
+		alert("クイズを更新しました！");
 		goto("/");
 	}
 </script>
@@ -54,7 +59,7 @@
 <div class="container mx-auto px-4 max-w-4xl mt-6">
 	<div class="card bg-base-100 shadow-xl">
 		<div class="card-body">
-			<h1 class="card-title text-2xl justify-center mb-6">クイズを投稿</h1>
+			<h1 class="card-title text-2xl justify-center mb-6">クイズを編集</h1>
 
 			<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
 				<fieldset class="fieldset w-full">
@@ -162,15 +167,15 @@
 							viewBox="0 0 24 24"
 							stroke-width="1.5"
 							stroke="currentColor"
-							class="size-5"
+							class="size-6"
 						>
 							<path
 								stroke-linecap="round"
 								stroke-linejoin="round"
-								d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5"
+								d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
 							/>
 						</svg>
-						クイズを投稿
+						クイズを更新
 					</button>
 				</div>
 			</div>
