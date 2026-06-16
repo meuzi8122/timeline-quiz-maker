@@ -1,7 +1,17 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
+	import { authClient } from "$lib/infrastructures/auth/auth-client";
+
+	const { get: getSession } = authClient.useSession();
+	const data = getSession().data;
 
 	async function handleCreateButtonClick() {
+		if (!data) {
+			alert("クイズを投稿するにはログインが必要です。");
+			goto("/login");
+			return;
+		}
+
 		try {
 			const res = await fetch("/editor/new", { method: "POST" });
 			const { id } = await res.json();
