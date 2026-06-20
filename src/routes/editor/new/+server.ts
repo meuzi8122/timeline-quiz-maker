@@ -3,7 +3,11 @@ import { createQuestionUsecase } from "$lib/usecases/question/create-question.js
 import { json, type RequestHandler } from "@sveltejs/kit";
 import { randomUUID } from "node:crypto";
 
-export const POST: RequestHandler = async ({ request }) => {
+export const POST: RequestHandler = async ({ locals }) => {
+	if (!locals.user) {
+		return json(null, { status: 401 });
+	}
+
 	const id = randomUUID();
 
 	try {
@@ -13,7 +17,7 @@ export const POST: RequestHandler = async ({ request }) => {
 			},
 			{
 				id,
-				ownerId: ""
+				ownerId: locals.user.id
 			}
 		);
 	} catch (error) {

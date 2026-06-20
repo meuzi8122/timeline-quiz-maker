@@ -50,6 +50,7 @@
 				class="menu dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
 			>
 				<li><a href="/">クイズを探す</a></li>
+				<li><a href="/my-questions">クイズを管理</a></li>
 				<li><button onclick={handleCreateButtonClick}>クイズを投稿</button></li>
 				<li><a href="/about">クイズの遊び方</a></li>
 				{#if data}

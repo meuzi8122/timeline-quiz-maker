@@ -11,13 +11,14 @@ export function createQuestionRepository(db: DbClient): QuestionRepository {
 		async create({ question }) {
 			try {
 				await db.execute({
-					query: `INSERT INTO ${QUESTION_TABLE_NAME} (id, theme1, theme2, description, is_draft) VALUES (?, ?, ?, ?, ?)`,
+					query: `INSERT INTO ${QUESTION_TABLE_NAME} (id, theme1, theme2, description, is_draft, owner_id) VALUES (?, ?, ?, ?, ?, ?)`,
 					values: [
 						question.id,
 						question.theme1,
 						question.theme2,
 						question.description,
-						question.isDraft ? 1 : 0
+						question.isDraft ? 1 : 0,
+						question.ownerId
 					]
 				});
 			} catch (error) {
@@ -30,6 +31,7 @@ export function createQuestionRepository(db: DbClient): QuestionRepository {
 				await db.execute({
 					query: `UPDATE ${QUESTION_TABLE_NAME} SET theme1 = ?, theme2 = ?, description = ?, is_draft = ? WHERE id = ?`,
 					values: [
+						// ownerIdは更新しない
 						question.theme1,
 						question.theme2,
 						question.description,
@@ -43,16 +45,6 @@ export function createQuestionRepository(db: DbClient): QuestionRepository {
 			}
 
 			if (occurrencePairs.length > 0) {
-				try {
-					await db.execute({
-						query: `SELECT COUNT(*) AS count FROM ${OCCURRENCE_PAIRS_TABLE_NAME} WHERE question_id = ?`,
-						values: [question.id]
-					});
-				} catch (error) {
-					console.error("Failed to check existing occurrence-pairs:", error);
-					throw new Error("Failed to check existing occurrence-pairs");
-				}
-
 				// TODO: トランザクションで全件成功 or 1件も登録しないを担保
 				for (const occurrencePair of occurrencePairs) {
 					try {

@@ -3,7 +3,11 @@ import { updateQuestionUsecase } from "$lib/usecases/question/update-question";
 import { updateQuestionSchema } from "./schema";
 import { json, type RequestHandler } from "@sveltejs/kit";
 
-export const POST: RequestHandler = async ({ request, params }) => {
+export const POST: RequestHandler = async ({ request, params, locals }) => {
+	if (!locals.user) {
+		return json(null, { status: 401 });
+	}
+
 	const formData = await request.formData();
 	const submission = updateQuestionSchema.safeParse(Object.fromEntries(formData.entries()));
 
@@ -29,7 +33,7 @@ export const POST: RequestHandler = async ({ request, params }) => {
 					theme2: submission.data.theme2,
 					description: submission.data.description,
 					isDraft: submission.data.isDraft,
-					ownerId: ""
+					ownerId: locals.user.id
 				},
 				occurrencePairs: submission.data.occurrencePairs
 			}
