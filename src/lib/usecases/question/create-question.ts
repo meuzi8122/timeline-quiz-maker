@@ -1,4 +1,3 @@
-import type { Question } from "$lib/domains/entitite/question";
 import type { QuestionRepository } from "$lib/repositories/question.server";
 
 export async function createQuestionUsecase(
