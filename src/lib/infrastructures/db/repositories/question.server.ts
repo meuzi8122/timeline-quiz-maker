@@ -11,8 +11,14 @@ export function createQuestionRepository(db: DbClient): QuestionRepository {
 		async create({ question }) {
 			try {
 				await db.execute({
-					query: `INSERT INTO ${QUESTION_TABLE_NAME} (id, theme1, theme2, description) VALUES (?, ?, ?, ?)`,
-					values: [question.id, question.theme1, question.theme2, question.description]
+					query: `INSERT INTO ${QUESTION_TABLE_NAME} (id, theme1, theme2, description, is_draft) VALUES (?, ?, ?, ?, ?)`,
+					values: [
+						question.id,
+						question.theme1,
+						question.theme2,
+						question.description,
+						question.isDraft ? 1 : 0
+					]
 				});
 			} catch (error) {
 				console.error("Failed to create question:", error);
@@ -22,8 +28,14 @@ export function createQuestionRepository(db: DbClient): QuestionRepository {
 		async update({ question, occurrencePairs }) {
 			try {
 				await db.execute({
-					query: `UPDATE ${QUESTION_TABLE_NAME} SET theme1 = ?, theme2 = ?, description = ? WHERE id = ?`,
-					values: [question.theme1, question.theme2, question.description, question.id]
+					query: `UPDATE ${QUESTION_TABLE_NAME} SET theme1 = ?, theme2 = ?, description = ?, is_draft = ? WHERE id = ?`,
+					values: [
+						question.theme1,
+						question.theme2,
+						question.description,
+						question.isDraft ? 1 : 0,
+						question.id
+					]
 				});
 			} catch (error) {
 				console.error("Failed to update question:", error);

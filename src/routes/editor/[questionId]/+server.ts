@@ -28,6 +28,7 @@ export const POST: RequestHandler = async ({ request, params }) => {
 					theme1: submission.data.theme1,
 					theme2: submission.data.theme2,
 					description: submission.data.description,
+					isDraft: submission.data.isDraft,
 					ownerId: ""
 				},
 				occurrencePairs: submission.data.occurrencePairs

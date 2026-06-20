@@ -24,6 +24,7 @@ export async function getQuestion(params: { id: string }): Promise<GetQuestionRe
 		theme1: questionRows[0].theme1?.toString() ?? "",
 		theme2: questionRows[0].theme2?.toString() ?? "",
 		description: questionRows[0].description?.toString() ?? "",
+		isDraft: questionRows[0].is_draft === 1,
 		occurrencePairs: occurrencePairsRows.map((row) => ({
 			id: row.id?.toString() ?? "",
 			occurredAt: row.occurred_at?.toString() ?? "",

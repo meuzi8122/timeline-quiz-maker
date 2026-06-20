@@ -25,5 +25,6 @@ export const updateQuestionSchema = z.object({
 					message: "日付が重複しています"
 				});
 			}
-		})
+		}),
+	isDraft: z.string().transform((text) => text === "true")
 });

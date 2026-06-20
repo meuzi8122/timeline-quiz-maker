@@ -28,13 +28,14 @@
 		occurencesPairs = occurencesPairs.filter((_, i) => i !== index);
 	}
 
-	async function handleSubmitButtonClick() {
+	async function handleSubmitButtonClick(isDraft: boolean) {
 		const formData = new FormData();
 
 		formData.append("theme1", theme1);
 		formData.append("theme2", theme2);
 		formData.append("description", description);
 		formData.append("occurrencePairs", JSON.stringify(occurencesPairs));
+		formData.append("isDraft", isDraft.toString());
 
 		const submission = updateQuestionSchema.safeParse(Object.fromEntries(formData.entries()));
 		if (!submission.success) {
@@ -51,7 +52,7 @@
 			alert("クイズの更新に失敗しました。時間を置いて再度お試しください。");
 		}
 
-		alert("クイズを更新しました！");
+		alert(isDraft ? "下書きとして保存しました！" : "クイズを更新しました！");
 		goto("/");
 	}
 </script>
@@ -95,7 +96,26 @@
 			</fieldset>
 
 			<div class="mb-6">
-				<h3 class="text-lg font-semibold mb-4">出来事</h3>
+				<h3 class="text-lg font-semibold mb-4 flex items-center">
+					出来事
+					<!-- svelte-ignore a11y_consider_explicit_label -->
+					<button
+						type="button"
+						class="btn btn-xs btn-ghost btn-circle"
+						onclick={handleAddButtonClick}
+					>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke-width="1.5"
+							stroke="currentColor"
+							class="size-5"
+						>
+							<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+						</svg>
+					</button>
+				</h3>
 				<div class="space-y-4">
 					{#each occurencesPairs as pair, index}
 						<div class="bg-base-200 p-4 rounded-lg">
@@ -147,20 +167,33 @@
 				{/if}
 
 				<div class="flex gap-3 justify-end mt-6">
-					<button type="button" class="btn btn-outline" onclick={handleAddButtonClick}>
+					<button
+						type="button"
+						class="btn btn-outline"
+						onclick={() => handleSubmitButtonClick(true)}
+					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							fill="none"
 							viewBox="0 0 24 24"
 							stroke-width="1.5"
 							stroke="currentColor"
-							class="size-5"
+							class="size-6"
 						>
-							<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15M9 12l3 3m0 0 3-3m-3 3V2.25"
+							/>
 						</svg>
-						出来事を追加
+
+						下書きとして保存
 					</button>
-					<button type="button" class="btn btn-primary" onclick={handleSubmitButtonClick}>
+					<button
+						type="button"
+						class="btn btn-primary"
+						onclick={() => handleSubmitButtonClick(false)}
+					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							fill="none"

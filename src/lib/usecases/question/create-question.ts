@@ -14,7 +14,8 @@ export async function createQuestionUsecase(
 			ownerId: params.ownerId,
 			theme1: "お題1",
 			theme2: "お題2",
-			description: ""
+			description: "",
+			isDraft: true
 		}
 	});
 }

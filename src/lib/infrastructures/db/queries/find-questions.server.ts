@@ -3,7 +3,7 @@ import { dbClient, QUESTION_TABLE_NAME } from "../client.server";
 
 export async function findQuestions(): Promise<Question[]> {
 	const rows = await dbClient.execute({
-		query: `SELECT * FROM ${QUESTION_TABLE_NAME}`
+		query: `SELECT * FROM ${QUESTION_TABLE_NAME} where is_draft = 0`
 	});
 	return [
 		SAMPLE_QUESTION,
@@ -12,7 +12,8 @@ export async function findQuestions(): Promise<Question[]> {
 			ownerId: row.owner_id?.toString() ?? "",
 			theme1: row.theme1?.toString() ?? "",
 			theme2: row.theme2?.toString() ?? "",
-			description: row.description?.toString() ?? ""
+			description: row.description?.toString() ?? "",
+			isDraft: row.is_draft === 1
 		}))
 	];
 }
