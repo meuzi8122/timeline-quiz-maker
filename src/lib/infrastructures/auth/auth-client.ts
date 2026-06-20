@@ -11,5 +11,6 @@ export async function signIn() {
 
 export async function signOut() {
 	await authClient.signOut();
+	alert("ログアウトしました");
 	goto("/");
 }
