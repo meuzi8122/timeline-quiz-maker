@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { goto } from "$app/navigation";
 	import type { OccurrencePair } from "$lib/domains/entitite/occurrence-pair";
 	import { updateQuestionSchema } from "./schema";
 	import { untrack } from "svelte";
@@ -53,7 +52,7 @@
 		}
 
 		alert(isDraft ? "下書きとして保存しました！" : "クイズを更新しました！");
-		goto("/");
+		history.back();
 	}
 </script>
 
